@@ -55,3 +55,52 @@ export const postRoles =async (req:Request,res:Response) => {
     return res.status(401).json(err)    
   }
 }
+
+export const putRoles =async (req:Request,res:Response) => {
+  const {descripcion}:IRol = req.body;
+  const {id} = req.params;
+  try {
+    //verifico que otro rol no tenga el mismo desc
+    const rolDB = await rol.findFirst({
+      where:{
+        descripcion
+      }
+    })
+    if(rolDB) return res.status(400).json("rol ya esta en el sistema.");
+    //actualizo el rol
+    const updateRol = await rol.update({
+      where:{
+        id: +id
+      },
+      data:{
+        descripcion
+      }
+    })
+    return res.status(200).json({
+      rol: updateRol,
+      msg: "El rol se modificado correctamente."
+    })
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json(err)
+  }
+}
+
+
+export const deleteRol =async (req:Request,res:Response) => {
+  const {id} = req.params;
+  try {
+    const deleteRol = await rol.delete({
+      where:{
+        id: +id
+      }
+    });
+    return res.status(200).json({
+      rol: deleteRol,
+      msg: "El rol se ha eliminado correctamente"
+    })
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json(err)
+  }
+}

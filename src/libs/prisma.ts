@@ -6,7 +6,8 @@ export const {
   rol,
   inicioSesion,
   cerrarSesion,
-  $transaction
+  libro,
+  almacen
 } = new PrismaClient();
 
 export default new PrismaClient();

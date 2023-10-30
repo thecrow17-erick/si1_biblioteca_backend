@@ -35,13 +35,12 @@ export const signIn = async(req:Request, res:Response) => {
     })
     //envio un jwt si esta todo correcto
     const token = await generateToken(userDB.id.toString());
-    return res.status(200).header({
-      "auth-token": token
-    }).json({
-      user: userDB
+    return res.status(200).json({
+      user: userDB,
+      token
     })
   } catch (err) {
     console.log(err);
-    return res.status(401).json(err)
+    return res.status(404).json(err)
   }
 }

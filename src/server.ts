@@ -3,7 +3,7 @@ import express,{
 } from 'express'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'
-import { authRoute, rolRoute, userRoute } from './routes';
+import { authRoute, libroRouter, rolRoute, userRoute } from './routes';
 
 
 export default class Server {
@@ -37,7 +37,8 @@ export default class Server {
     const api = "api";
     this.app.use(`/${api}/user`,userRoute);
     this.app.use(`/${api}/rol`, rolRoute);
-    this.app.use(`/${api}/auth`,authRoute)
+    this.app.use(`/${api}/auth`,authRoute);
+    this.app.use(`/${api}/libro`,libroRouter);
   }
 
   listen(): void {

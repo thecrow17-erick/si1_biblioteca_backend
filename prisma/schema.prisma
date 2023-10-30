@@ -33,7 +33,6 @@ model Rol {
   descripcion       String @db.VarChar(50)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now()) @updatedAt
-
   //user
   user              User[]
 }
@@ -54,3 +53,51 @@ model CerrarSesion{
   userId            Int
   user              User @relation(fields: [userId],references: [id],onDelete: Cascade,onUpdate: Cascade)
 } 
+
+model Libro{
+  id                Int @id @default(autoincrement())
+  titulo            String @db.VarChar(100)
+  autor             String @db.VarChar(50)
+  precio            Decimal @db.Decimal(10,2)
+  edicion           String @db.VarChar(50)
+  fechaLanzamiento  DateTime @db.Date
+  imagen            String @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  //almacen
+  almacen           Almacen? 
+
+  //nota de ingreso
+  detalleIngreso    DetalleIngreso[]
+}
+//nota del ingreso
+model NotaIngreso{
+  id                Int @id @default(autoincrement())
+  fechaIngreso      DateTime @default(now())
+  proveedor         String @db.VarChar(50)
+
+  //DetalleIngreso
+  detalleIngreso    DetalleIngreso[]
+}
+//detalle del ingreso
+model DetalleIngreso{
+  //libro
+  libroId           Int 
+  libro             Libro @relation(fields: [libroId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  
+  //nota de ingreso
+  notaId            Int   
+  nota              NotaIngreso @relation(fields: [notaId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+
+  cantidad          Int
+  @@id([libroId])
+}
+
+model Almacen{
+  id                Int @unique
+  libro             Libro @relation(fields: [id],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  cantidad          Int @default(0)
+  updatedAt         DateTime @default(now()) @updatedAt
+}
+
