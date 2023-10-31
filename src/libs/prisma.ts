@@ -7,7 +7,9 @@ export const {
   inicioSesion,
   cerrarSesion,
   libro,
-  almacen
+  almacen,
+  detalleIngreso,
+  notaIngreso
 } = new PrismaClient();
 
 export default new PrismaClient();

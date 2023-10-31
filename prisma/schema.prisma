@@ -91,7 +91,7 @@ model DetalleIngreso{
   nota              NotaIngreso @relation(fields: [notaId],references: [id],onDelete: Cascade,onUpdate: Cascade)
 
   cantidad          Int
-  @@id([libroId])
+  @@id([libroId,notaId])
 }
 
 model Almacen{
