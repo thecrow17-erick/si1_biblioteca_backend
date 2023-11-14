@@ -1,4 +1,4 @@
-import { rol, user } from "./prisma"
+import { libro, rol, user } from "./prisma"
 
 
 
@@ -18,4 +18,14 @@ export const validarRol = async(id:string)=>{
     }
   })
   if(!rolDB) throw new Error("Ingrese un usuario valido")
+}
+
+
+export const validarLibro= async(id:string)=>{
+  const libroDB = await libro.findUnique({
+    where:{
+      id: +id
+    }
+  })
+  if(!libroDB) throw new Error("Ingrese un libro valido")
 }

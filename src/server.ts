@@ -3,7 +3,7 @@ import express,{
 } from 'express'
 import cors from 'cors'
 import fileUpload from 'express-fileupload'
-import { authRoute, ingresoRouter, libroRouter, rolRoute, userRoute } from './routes';
+import { authRoute, ingresoRouter, libroRouter, rolRoute, userRoute,reservaRoute } from './routes';
 
 
 export default class Server {
@@ -21,7 +21,6 @@ export default class Server {
     this.app.use(express.json());
     //para urlear el servidor
     this.app.use(express.urlencoded({extended: true}))
-
     //cors para las peticiones
     this.app.use(cors({
       methods: '*',
@@ -40,6 +39,7 @@ export default class Server {
     this.app.use(`/${api}/auth`,authRoute);
     this.app.use(`/${api}/libro`,libroRouter);
     this.app.use(`/${api}/nota-ingreso`,ingresoRouter);
+    this.app.use(`/${api}/reserva`,reservaRoute);
   }
 
   listen(): void {
@@ -48,5 +48,4 @@ export default class Server {
       
     })
   }
-
 }

@@ -10,6 +10,57 @@ import { addProductImg } from '../libs/addImagen';
 
 const prismaCliet = new PrismaClient();
 
+export const getLibrosCliente = async(_:Request,res:Response) => {
+  try {
+    const[total,libros] = await Promise.all([
+      libro.count({
+        where:{
+          almacen:{
+            cantidad:{
+              gt: 0
+            }
+          }
+        }
+      }),
+      libro.findMany({
+        where:{
+          almacen:{
+            cantidad:{
+              gt: 0
+            }
+          }
+        },
+        select:{
+          id: true,
+          titulo: true,
+          autor: true,
+          edicion: true,
+          imagen: true,
+          precio: true,
+          fechaLanzamiento: true,
+          almacen: {
+            select:{
+              cantidad: true,
+            }
+          }
+        }
+      })
+    ])
+    //pongo bien el link de imagenes
+    libros.forEach(libro => {
+      libro.imagen = `${process.env.HOST_COUNT_STORAGE}libros/${libro.imagen}` 
+    });
+
+    return res.status(200).json({
+      total,
+      libros
+    })
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json(err)
+  }
+}
+
 export const getLibros =async (req:Request,res:Response) => {
   const {take,skip} = req.query;
   try {
@@ -43,7 +94,6 @@ export const getLibros =async (req:Request,res:Response) => {
     return res.status(401).json(err)    
   }
 }
-
 
 export const postLibro =async (req:Request,res:Response) => {
   const {titulo,autor,edicion,precio,fechaLanzamiento} = req.body;
