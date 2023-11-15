@@ -12,7 +12,7 @@ const prismaCliet = new PrismaClient();
 
 export const getLibrosCliente = async(_:Request,res:Response) => {
   try {
-    const[total,libros] = await Promise.all([
+    const[total,allLibros] = await Promise.all([
       libro.count({
         where:{
           almacen:{
@@ -47,13 +47,13 @@ export const getLibrosCliente = async(_:Request,res:Response) => {
       })
     ])
     //pongo bien el link de imagenes
-    libros.forEach(libro => {
+    allLibros.forEach(libro => {
       libro.imagen = `${process.env.HOST_COUNT_STORAGE}libros/${libro.imagen}` 
     });
 
     return res.status(200).json({
       total,
-      libros
+      allLibros
     })
   } catch (err) {
     console.log(err);

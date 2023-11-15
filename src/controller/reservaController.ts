@@ -8,7 +8,7 @@ export const getReservasCliente = async(req: Request,res:Response)=>{
   const clienteId = req.userId;
   const {skip, take} = req.query;
   try {
-    const [total,reservas] = await Promise.all([
+    const [total,allReservas] = await Promise.all([
       reservaLibros.count({
         where: {
           clienteId
@@ -20,11 +20,23 @@ export const getReservasCliente = async(req: Request,res:Response)=>{
         },
         skip: parseInt(String(skip))|0,
         take: parseInt(String(take))|5,
+        select:{
+          id: true,
+          estado: true,
+          fecha_reserva: true,
+          libro:{
+            select:{
+              id: true,
+              titulo: true,
+              precio: true
+            }
+          }
+        }
       }) 
     ]);
     return res.status(200).json({
       total,
-      reservas
+      allReservas
     })
   } catch (err) {
     console.log(err);
@@ -35,16 +47,33 @@ export const getReservasCliente = async(req: Request,res:Response)=>{
 export const getReservasAdmin = async(req: Request,res:Response)=>{
   const {skip, take} = req.query;
   try {
-    const [total,reservas] = await Promise.all([
+    const [total,allReservas] = await Promise.all([
       reservaLibros.count(),
       reservaLibros.findMany({
         skip: parseInt(String(skip))|0,
         take: parseInt(String(take))|5,
+        select:{
+          id: true,
+          estado: true,
+          fecha_reserva: true,
+          cliente:{
+            select:{
+              id: true,
+              nombre: true
+            }
+          },
+          libro:{
+            select:{
+              id: true,
+              titulo: true,
+            }
+          }
+        }
       }) 
     ]);
     return res.status(200).json({
       total,
-      reservas
+      allReservas
     })
   } catch (err) {
     console.log(err);

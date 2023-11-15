@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { getReservasCliente, postReserva } from '../controller/reservaController';
+import { getReservasAdmin, getReservasCliente, postReserva } from '../controller/reservaController';
 import { tokenValidation, validateFields } from '../middlewares';
 import { check } from 'express-validator';
 import { validarLibro} from '../libs/validateDB';
@@ -11,7 +11,7 @@ reservaRoute.get("/cliente", [
   tokenValidation
 ],getReservasCliente);
 
-reservaRoute.get("/admin",getReservasCliente);
+reservaRoute.get("/admin",getReservasAdmin);
 
 reservaRoute.post("/",[
   check("fecha_reserva","Ingrese una fecha").notEmpty(),
