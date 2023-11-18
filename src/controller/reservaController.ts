@@ -6,7 +6,6 @@ const prismaClient = new PrismaClient();
 
 export const getReservasCliente = async(req: Request,res:Response)=>{
   const clienteId = req.userId;
-  const {skip, take} = req.query;
   try {
     const [total,allReservas] = await Promise.all([
       reservaLibros.count({
@@ -18,8 +17,6 @@ export const getReservasCliente = async(req: Request,res:Response)=>{
         where:{ 
           clienteId
         },
-        skip: parseInt(String(skip))|0,
-        take: parseInt(String(take))|5,
         select:{
           id: true,
           estado: true,
@@ -95,6 +92,20 @@ export const postReserva = async (req:Request,res:Response) => {
           clienteId,
           fecha_reserva,
           libroId
+        }
+      })
+      await tx.libro.update({
+        where:{
+          id: libroId
+        },
+        data:{
+          almacen:{
+            update:{
+              cantidad:{
+                decrement: 1
+              }
+            }
+          }
         }
       })
       return reservaCreate;
