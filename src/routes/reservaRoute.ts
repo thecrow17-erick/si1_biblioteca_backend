@@ -1,8 +1,8 @@
 import {Router} from 'express'
-import { getReservasAdmin, getReservasCliente, postReserva } from '../controller/reservaController';
+import { deleteReserva, getReservasAdmin, getReservasCliente, postReserva } from '../controller/reservaController';
 import { tokenValidation, validateFields } from '../middlewares';
 import { check } from 'express-validator';
-import { validarLibro} from '../libs/validateDB';
+import { validarLibro, validarReserva} from '../libs/validateDB';
 
 
 export const reservaRoute = Router();
@@ -19,4 +19,11 @@ reservaRoute.post("/",[
   validateFields,
   tokenValidation
 ],postReserva);
+
+
+reservaRoute.delete("/:id",[
+  check("id", "ingrese un reserva valida.").notEmpty().custom(validarReserva),
+  tokenValidation,
+  validateFields,
+],deleteReserva);
 

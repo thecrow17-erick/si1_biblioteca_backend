@@ -61,14 +61,11 @@ export const getLibrosCliente = async(_:Request,res:Response) => {
   }
 }
 
-export const getLibros =async (req:Request,res:Response) => {
-  const {take,skip} = req.query;
+export const getLibros =async (_:Request,res:Response) => {
   try {
     const [total,allLibros] = await Promise.all([
       libro.count(),
       libro.findMany({
-        skip: parseInt(String(skip))|0,
-        take: parseInt(String(take))|5,
         select: {
           id: true,
           titulo: true,

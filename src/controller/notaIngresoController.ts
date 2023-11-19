@@ -6,14 +6,11 @@ import {PrismaClient} from '@prisma/client'
 const prismaClient = new PrismaClient();
 
 //mostrar todas las notas de ingreso
-export const getNotasIngreso = async(req: Request,res:Response)=>{
-  const {take, skip} = req.query;
+export const getNotasIngreso = async(_: Request,res:Response)=>{
   try {
     const [total,allNotasIngreso] = await Promise.all([
       notaIngreso.count(),
       notaIngreso.findMany({
-        skip: +String(skip) || 0,
-        take: +String(take) || 5,
         select:{
           id: true,
           proveedor: true,

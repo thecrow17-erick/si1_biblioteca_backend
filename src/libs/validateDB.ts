@@ -1,4 +1,4 @@
-import { libro, rol, user } from "./prisma"
+import { libro, reservaLibros, rol, user } from "./prisma"
 
 
 
@@ -28,4 +28,13 @@ export const validarLibro= async(id:string)=>{
     }
   })
   if(!libroDB) throw new Error("Ingrese un libro valido")
+}
+
+export const validarReserva= async(id:string)=>{
+  const reservaDB = await reservaLibros.findUnique({
+    where:{
+      id: +id
+    }
+  })
+  if(!reservaDB) throw new Error("Ingrese una reserva valida")
 }

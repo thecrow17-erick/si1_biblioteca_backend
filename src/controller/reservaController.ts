@@ -116,3 +116,24 @@ export const postReserva = async (req:Request,res:Response) => {
     return res.status(404).json(err)
   }
 }
+
+export const deleteReserva =async (req:Request,res:Response) => {
+  const {id} = req.params;
+  const clienteId = req.userId;
+  try {
+    //veo si existe la reserva
+    const response = await prismaClient.$transaction(async(tx)=>{
+      const reservaDelete = await tx.reservaLibros.delete({
+        where:{
+          id: +id,
+          clienteId
+        }
+      })
+      return reservaDelete;
+    })
+    return res.status(202).json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(404).json(err)
+  }
+}
